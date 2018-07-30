@@ -57,7 +57,7 @@ Run the following command in your terminal to install the latest official Meteor
 1. git clone https://github.com/simranjitk/restest.git
 2. cd restest
 3. meteor npm install
-4. meteor run
+4. npm start
 
 The application will be running at localhost:3000
 ```
