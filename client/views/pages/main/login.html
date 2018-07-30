@@ -1,0 +1,41 @@
+<template name="login">
+  <div class="row equal">
+
+    <div class="col-xs-12 col-sm-4 gray-bg">
+      <div class="middle-box text-center animated fadeInDown vertical-center">
+        <div>
+          <h2>
+            <strong>RESTest</strong>
+          </h2>
+          <br>
+          <p>Login to access your account.</p>
+          <form class="m-t" role="form">
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Email" required="" name="email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder="Password" required="" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+            <!-- <a href="{{pathFor route='forgotPassword'}}">
+              <small>Forgot password?</small>
+            </a> -->
+            <p class="text-muted text-center">
+              <small>Do not have an account?</small>
+            </p>
+            <a class="btn btn-sm btn-white btn-block" href="{{pathFor route='register'}}">Create an account</a>
+          </form>
+
+          <p class="m-t">
+            <small>RESTest</small>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+</template>

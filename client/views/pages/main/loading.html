@@ -1,0 +1,19 @@
+<template name="notFoundLoading">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-info" id="load1">
+        <center>Loading <img src="img/ajax-loader.gif" alt="Mountain View" style="width:10px;height:10px;">.</center>
+      </div>
+    </div>
+    <script>
+    $(function() {
+      $( "#load1" ).isLoading({
+        text:       "Loading ",
+        position:   "inside"
+      });
+
+    });
+    </script>
+
+  </div>
+</template>

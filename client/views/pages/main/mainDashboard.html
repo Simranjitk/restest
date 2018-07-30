@@ -1,0 +1,272 @@
+<template name="mainDashboard">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css" />
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
+
+  <div class="wrapper wrapper-content">
+
+
+
+    {{#if currentUser}} {{#if errors}}
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Error Tracking</h1>
+        <hr>
+        <br> {{>errorChart}}
+      </div>
+    </div>
+    <hr> {{/if}}
+
+    <div class="row">
+
+      <div class="col-md-12">
+        <h1>
+          Your APIs
+          <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#addApi">Add Api</button>
+        </h1>
+        <hr> {{#if apis}} Date of Analysis: {{todaysDate}} {{/if}}
+
+        <br>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+
+
+      <div id="menu">
+        <div class="panel list-group">
+          {{#each apis}}
+
+          <h2>
+            {{#if $eq this.status 'pass'}}
+            <div class="list-group-item greenTopBar"></div>
+            {{else}}
+            <div class="list-group-item redTopBar"></div>
+            {{/if}}
+            <a href="#" class="list-group-item" data-toggle="collapse" data-target="#{{this._id}}" data-parent="#menu">
+
+              {{this.apiName}}
+              <a href="#" title="Remove API">
+                <i class="fa fa-times pull-right" data-value="{{this._id}}" id='removeApi' style="color:black" aria-hidden="true"></i>
+              </a>
+              <br>
+              <br>
+              <div class="btn-toolbar">
+                {{#if $eq this.status 'pass'}}
+                <span class="label label-green">Response Time: {{this.responseTime}} ms</span>
+                {{else}}
+                <span class="label label-danger">fail</span>
+                {{/if}}
+                <span class="label label-success">{{this.updatedTime}}</span>
+
+                <span class="label label-info">{{this.frequency}}</span>
+              </div>
+
+            </a>
+          </h2>
+          <div id="{{this._id}}" class="sublinks collapse" style="border:1px solid #cecece;">
+            <div class="col-md-12 well well-sm">
+              <h1>{{> editableText collection="apiaddress" field="apiName"}}</h1>
+              <hr>
+
+              <button type="button" class="btn btn-link" data-toggle="modal" data-target=".{{this._id}}">Response</button>
+              <button type="button" class="btn btn-link" data-toggle="modal" data-target=".header-{{this._id}}">Headers</button>
+              <br>
+              <canvas id="statusChart-{{this._id}}" height="80"></canvas>
+
+            </div>
+            <div class="ibox-content">
+              <br>
+              <br>
+              <br> {{#if this.updatedTime}} Last updated: {{this.updatedTime}} {{/if}}
+
+              <br>
+              <br>
+              <div class="form-group">
+                <div class="form-horizontal">
+                  <label for="formGroupExampleInput2">Update frequency:</label>
+                  <br>
+                  <div class="btn-group" role="group" aria-label="First group">
+                    {{#if $neq this.frequency 'every 30 seconds'}}
+                    <button type="button" class="btn btn-default" id="frequencyButton" data-value="every 30 seconds,{{this._id}}">30 seconds</button>
+                    {{else}}
+                    <button type="button" class="btn btn-default" disabled>Current: 30 seconds</button>
+                    {{/if}} {{#if $neq this.frequency 'every 1 minute'}}
+                    <button type="button" class="btn btn-default" id="frequencyButton" data-value="every 1 minute,{{this._id}}">1 minute</button>
+                    {{else}}
+                    <button type="button" class="btn btn-default" disabled>Current: 1 minute</button>
+                    {{/if}} {{#if $neq this.frequency 'every 15 minutes'}}
+                    <button type="button" class="btn btn-default" id="frequencyButton" data-value="every 15 minutes,{{this._id}}">15 minutes</button>
+                    {{else}}
+                    <button type="button" class="btn btn-default" disabled>Current: 15 minutes</button>
+                    {{/if}} {{#if $neq this.frequency 'every 30 minutes'}}
+                    <button type="button" class="btn btn-default" id="frequencyButton" data-value="every 30 minutes,{{this._id}}">30 minutes</button>
+                    {{else}}
+                    <button type="button" class="btn btn-default" disabled>Current: 30 minutes</button>
+                    {{/if}} {{#if $neq this.frequency 'every 1 hour'}}
+                    <button type="button" class="btn btn-default" id="frequencyButton" data-value="every 1 hour,{{this._id}}">1 hour</button>
+                    {{else}}
+                    <button type="button" class="btn btn-default" disabled>Current: 1 hour</button>
+                    {{/if}} {{#if $neq this.frequency 'every 3 hours'}}
+                    <button type="button" class="btn btn-default" id="frequencyButton" data-value="every 3 hours,{{this._id}}">3 hours</button>
+                    {{else}}
+                    <button type="button" class="btn btn-default" disabled>Current: 3 hours</button>
+                    {{/if}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+            <div class="modal {{this._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{{this.apiName}} Headers: </h4>
+                  </div>
+
+                  <div class="modal-body">
+                    <div id="apiResponse">
+
+                    </div>
+                    <pre>{{this.response}}</pre>
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal header-{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{{this.apiName}} Response: </h4>
+                  </div>
+
+                  <div class="modal-body">
+                    <div id="apiResponse">
+
+                    </div>
+                    <pre>{{this.header}}</pre>
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+
+        </div>
+      </div>
+      {{#if loading}}
+      <div id="menu">
+        <div class="panel list-group">
+
+          <a href="#" class="list-group-item">
+            <div id="load1"></div>
+            <script>
+              $(function () {
+                $("#load1").isLoading({
+                  text: "Adding API ",
+                  position: "inside"
+                });
+
+              });
+            </script>
+
+          </a>
+
+        </div>
+      </div>
+      {{/if}}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="modal" id="addApi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Track API</h4>
+                </div>
+
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput">API Name</label>
+                      <input class="form-control" id="formGroupExampleInput" placeholder="Name">
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">API Access Url</label>
+                      <input class="form-control" id="formGroupExampleInput2" placeholder="Url">
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">Authentication (if required)</label>
+                      <input class="form-control" id="authorization" placeholder="username:password">
+                    </div>
+
+                    <hr>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">API Access</label>
+                      <select class="selectpicker form-control" id="getOrPost">
+                        <option>GET</option>
+                        <option>POST</option>
+                      </select>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">Usage or Status</label>
+                      <select class="selectpicker form-control" id="usageOrStatus">
+                        <option>Status</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="formGroupExampleInput2">Status update frequency</label>
+                      <select id="addingFrequency" class="selectpicker form-control">
+                        <option>every 30 seconds</option>
+                        <option>every 15 minutes</option>
+                        <option>every 30 minutes</option>
+                        <option>every 1 hour</option>
+                        <option>every 3 hours</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-info" id="add" data-dismiss="modal">Add API</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    {{else}}
+    <p class="alert alert-warning">Please
+      <a href="/">login</a> to view this page.</p>
+
+    {{/if}}
+
+  </div>
+</template>

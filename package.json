@@ -1,0 +1,13 @@
+{
+  "name": "RESTest",
+  "private": true,
+  "scripts": {
+    "start": "meteor run --settings settings.json"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.20.0",
+    "meteor-node-stubs": "~0.2.4",
+    "moment": "^2.18.1",
+    "slack-bot": "^1.1.5"
+  }
+}

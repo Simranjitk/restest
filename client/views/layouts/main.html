@@ -1,0 +1,30 @@
+<template name="mainLayout">
+
+    <!-- Wrapper-->
+    <div id="wrapper" class="dark_gray-bg">
+
+        <!-- Navigation -->
+        {{> navigation}}
+        <!-- Page wraper -->
+
+        <div id="page-wrapper" class="white-bg">
+
+            <!-- Page wrapper -->
+            {{> topNavbar }}
+
+            <!-- Main view  -->
+            {{> yield}}
+
+            <!-- Footer -->
+            {{> footer }}
+
+        </div>
+        <!-- End page wrapper-->
+
+        <!-- Right Sidebar -->
+        <!--{{> rightSidebar }}-->
+
+    </div>
+    <!-- End wrapper-->
+
+</template>

@@ -1,0 +1,36 @@
+<template name="topNavbar">
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                {{#if currentUser}}
+                <li>
+                    <span class="m-r-sm text-muted welcome-message"> Hello, {{currentUser.username}}!</span>
+                </li>
+                {{else}}
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">RESTest - API Monitoring</span>
+                </li>
+                {{/if}} {{#if currentUser}}
+
+                <li>
+                    <a href="/signout" class="logout">
+                        <button type="button" class="btn btn-default navbar-btn">
+                            <i class="fas fa-sign-out-alt"></i> Log out</button>
+                    </a>
+                </li>
+                {{else}}
+                <li>
+                    <a href="/">
+                        <button type="button" class="btn btn-default navbar-btn">
+                            <i class="fas fa-sign-in-alt"></i> Log In</button>
+                    </a>
+                </li>
+                {{/if}}
+
+            </ul>
+
+        </nav>
+    </div>
+</template>
